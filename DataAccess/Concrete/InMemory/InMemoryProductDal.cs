@@ -3,6 +3,7 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,9 +30,14 @@ namespace DataAccess.Concrete.InMemory
         public void Delete(Product product)
         {
 
-            Product productToDelete = _products.SingleOrDefault(p => p.ProductId == product.ProductId);
+            Product productToDelete = _products.Single(p => p.ProductId == product.ProductId);
 
             _products.Remove(productToDelete);
+        }
+
+        public Product Get(Expression<Func<Product, bool>> filter)
+        {
+            throw new NotImplementedException();
         }
 
         public List<Product> GetAll()
@@ -39,15 +45,20 @@ namespace DataAccess.Concrete.InMemory
             return _products;
         }
 
-        public List<Product> GetAllByCategory(int categoryId)  
+        public List<Product> GetAll(Expression<Func<Product, bool>>? filter = null)
         {
-           return _products.Where(p => p.CategoryId == categoryId).ToList();
+            throw new NotImplementedException();
+        }
+
+        public List<Product> GetAllByCategory(int categoryId)
+        {
+            return _products.Where(p => p.CategoryId == categoryId).ToList();
         }
 
         public void Update(Product product)
         {
-            Product productToUpdate = _products.SingleOrDefault(p => p.ProductId == product.ProductId);
-               
+            Product productToUpdate = _products.Single(p => p.ProductId == product.ProductId);
+
         }
     }
 }
