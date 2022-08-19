@@ -2,6 +2,7 @@
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,9 @@ namespace Business.Concrete
         public List<Product> GetAll()
         {
             return _productDal.GetAll();   
+        }
+    public List<ProductDetailDto> GetProductDetails() {
+            return _productDal.GetProductDetails();
         }
     }
 }
