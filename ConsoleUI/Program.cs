@@ -1,24 +1,46 @@
 ﻿using Business.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
+using System;
 
-ProductTest();
-//CategoryTest();
-
-static void ProductTest()
+class Program
 {
-    ProductManager productManager = new ProductManager(new EFProductDal());
-    foreach (var product in productManager.GetProductDetails())
+    static void Main(string[] args)
     {
-        Console.WriteLine(product.ProductName+"/"+product.CategoryName);
+        //Data Transformation Object
+        ProductTest();
+        //IoC 
+        //CategoryTest();
     }
-}
 
-static void CategoryTest()
-{
-    CategoryManager categoryManager = new CategoryManager(new EFCategoryDal());
-    foreach (var category in categoryManager.GetAll())
+    private static void CategoryTest()
     {
-        Console.WriteLine(category.CategoryName);
+        CategoryManager categoryManager = new CategoryManager(new EFCategoryDal());
+        foreach (var category in categoryManager.GetAll().Data)
+        {
+            Console.WriteLine(category.CategoryName);
+        }
+    }
+
+    private static void ProductTest()
+    {
+        ProductManager productManager = new ProductManager(new EFProductDal()
+            , new CategoryManager(new EFCategoryDal()));
+
+        var result = productManager.GetProductDetails();
+
+        if (result.Success == true)
+        {
+            foreach (var product in result.Data)
+            {
+                Console.WriteLine(product.ProductName + "/" + product.CategoryName);
+            }
+        }
+        else
+        {
+            Console.WriteLine(result.Message);
+        }
+
+
     }
 }
