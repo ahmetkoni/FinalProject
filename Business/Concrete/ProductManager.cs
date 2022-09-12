@@ -3,6 +3,7 @@ using Business.BusinessAspect.Autofac;
 using Business.constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Business;
@@ -52,7 +53,7 @@ namespace Business.Concrete
 
 
 
-        [SecuredOperation("porduct.add,admin")]
+        //[SecuredOperation("porduct.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         [CacheRemoveAspect("IProductService.Get")]
         public IResult Add(Product product)
@@ -128,6 +129,16 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.CategorLimitExceded);
             }
             return new SuccessResult();
+        }
+
+
+        [TransactionScopeAspect]
+        public IResult AddTransactionalTest(Product product)
+        {
+           _productDal.Add(product);
+           _productDal.Update(product);
+            return new SuccessResult(Messages.ProductUpdated);
+
         }
     }
 }
